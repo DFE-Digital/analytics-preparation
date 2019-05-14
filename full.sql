@@ -20,9 +20,7 @@ CREATE MATERIALIZED VIEW regions AS (
 );
 
 CREATE INDEX idx_regions_edges ON regions USING gist (edge) ;
-DROP MATERIALIZED VIEW IF EXISTS bookings_school_searches_cleansed;
-
-CREATE MATERIALIZED VIEW bookings_school_searches_cleansed AS (
+CREATE OR REPLACE VIEW bookings_school_searches_cleansed AS (
 	SELECT
 		bookings_school_searches.id,
 		bookings_school_searches.location,
@@ -58,9 +56,7 @@ CREATE MATERIALIZED VIEW bookings_school_searches_cleansed AS (
 				bookings_school_searches.coordinates::geometry
 			)
 );
-DROP MATERIALIZED VIEW IF EXISTS bookings_schools_cleansed;
-
-CREATE MATERIALIZED VIEW bookings_schools_cleansed AS (
+CREATE OR REPLACE VIEW bookings_schools_cleansed AS (
 	SELECT
 		bookings_schools.id,
 		bookings_schools.name,

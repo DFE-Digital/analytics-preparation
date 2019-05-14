@@ -1,6 +1,4 @@
-DROP MATERIALIZED VIEW IF EXISTS bookings_school_searches_cleansed;
-
-CREATE MATERIALIZED VIEW bookings_school_searches_cleansed AS (
+CREATE OR REPLACE VIEW bookings_school_searches_cleansed AS (
 	SELECT
 		bookings_school_searches.id,
 		bookings_school_searches.location,
