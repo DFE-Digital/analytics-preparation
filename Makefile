@@ -1,2 +1,2 @@
 compile:
-	cat scripts/*.sql > full.sql
+	cat scripts/{support,reports}/*.sql > full.sql

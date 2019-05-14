@@ -1,4 +1,6 @@
-CREATE OR REPLACE VIEW bookings_schools_cleansed AS (
+DROP MATERIALIZED VIEW IF EXISTS bookings_schools_cleansed;
+
+CREATE MATERIALIZED VIEW bookings_schools_cleansed AS (
 	SELECT
 		bookings_schools.id,
 		bookings_schools.name,
@@ -22,7 +24,21 @@ CREATE OR REPLACE VIEW bookings_schools_cleansed AS (
 		bookings_schools.primary_key_stage_info,
 		bookings_schools.availability_info,
 		bookings_schools.teacher_training_website,
-		bookings_schools.enabled
+		bookings_schools.enabled,
+		d.name AS district,
+		r.name AS region
 	FROM
 		bookings_schools
+	LEFT OUTER JOIN
+		regions AS r
+			ON st_contains(
+				r.edge,
+				bookings_schools.coordinates::geometry
+			)
+	LEFT OUTER JOIN
+		districts AS d
+			ON st_contains(
+				d.edge,
+				bookings_schools.coordinates::geometry
+			)
 );
