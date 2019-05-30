@@ -34,7 +34,8 @@ CREATE OR REPLACE VIEW bookings_school_searches_cleansed AS (
 		subject_id,
 		phase_id,
 		d.name AS district,
-		r.name AS region
+		r.name AS region,
+		bookings_school_searches.analytics_tracking_uuid
 	FROM
 		bookings_school_searches
 	LEFT JOIN LATERAL
