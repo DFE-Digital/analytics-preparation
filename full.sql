@@ -107,7 +107,7 @@ create or replace view school_onboarded_requests as (
         bpr.id                         as "placement_request_id",
         bp.created_at                  as "onboarded_at",
         bpr.created_at > bp.created_at as "requested_after_onboarding",
-        bpr.created_at                 as "placement_requested_at",
+        bpr.created_at                 as "placement_requested_at"
     from
         bookings_schools bs
     left outer join
