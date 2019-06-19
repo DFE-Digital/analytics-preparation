@@ -12,7 +12,13 @@ create or replace view school_onboarded_requests as (
     left outer join
         bookings_profiles bp
             on bs.id = bp.school_id
+    /*  note we originally used the ID to join
+     *  but it wasn't there from the start, so some
+     *  records will be missing it until the fixup script
+     *  is run
+     */
     inner join
         bookings_placement_requests bpr
-            on bs.id = bpr.bookings_school_id
-);
+        on bs.urn = bpr.urn
+        -- on bs.id = bpr.bookings_school_id
+    );
