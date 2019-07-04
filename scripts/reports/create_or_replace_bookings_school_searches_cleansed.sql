@@ -34,4 +34,6 @@ CREATE OR REPLACE VIEW bookings_school_searches_cleansed AS (
 				d.edge,
 				bookings_school_searches.coordinates::geometry
 			)
+	WHERE
+		upper(location) not in (select value from locations_to_ignore)
 );
