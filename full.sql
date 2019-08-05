@@ -149,14 +149,13 @@ create or replace view school_onboarded_requests as (
             on bs.id = bp.school_id
     inner join
         bookings_placement_requests bpr
-        on bs.urn = bpr.urn
-    group by (
+			on bs.urn = bpr.urn
+    group by
         bs.id,
         bs.urn,
         bs.name,
         bp.created_at
-    )
-;
+);
 create or replace view schools_by_phase as (
 	select
 		bs.urn,
