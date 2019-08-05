@@ -94,7 +94,8 @@ CREATE OR REPLACE VIEW bookings_schools_cleansed AS (
 		bookings_schools.teacher_training_website,
 		bookings_schools.enabled,
 		d.name AS district,
-		r.name AS region
+		r.name AS region,
+		bookings_schools.views
 	FROM
 		bookings_schools
 	LEFT OUTER JOIN
@@ -134,6 +135,28 @@ create or replace view school_onboarded_requests as (
         on bs.urn = bpr.urn
         -- on bs.id = bpr.bookings_school_id
     );
+create or replace view school_onboarded_requests as (
+    select
+        bs.id                          as "school_id",
+        bs.urn                         as "urn",
+        bs.name                        as "school_name",
+        bp.created_at                  as "onboarded_at",
+        max(bpr.created_at)            as "latest_placement_requested_at"
+    from
+        bookings_schools bs
+    left outer join
+        bookings_profiles bp
+            on bs.id = bp.school_id
+    inner join
+        bookings_placement_requests bpr
+        on bs.urn = bpr.urn
+    group by (
+        bs.id,
+        bs.urn,
+        bs.name,
+        bp.created_at
+    )
+;
 create or replace view schools_by_phase as (
 	select
 		bs.urn,
