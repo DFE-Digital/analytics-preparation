@@ -1,4 +1,4 @@
-create or replace view school_onboarded_requests as (
+create or replace view school_onboarded_status as (
     select
         bs.id                          as "school_id",
         bs.urn                         as "urn",
