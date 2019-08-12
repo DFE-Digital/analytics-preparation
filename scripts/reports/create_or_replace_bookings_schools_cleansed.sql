@@ -25,7 +25,8 @@ CREATE OR REPLACE VIEW bookings_schools_cleansed AS (
 		bookings_schools.enabled,
 		d.name AS district,
 		r.name AS region,
-		bookings_schools.views
+		bookings_schools.views,
+		bookings_schools.availability_preference_fixed
 	FROM
 		bookings_schools
 	LEFT OUTER JOIN
