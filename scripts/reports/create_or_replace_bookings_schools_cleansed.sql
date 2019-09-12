@@ -41,4 +41,17 @@ CREATE OR REPLACE VIEW bookings_schools_cleansed AS (
 				d.edge,
 				bookings_schools.coordinates::geometry
 			)
+	LEFT OUTER JOIN
+		bookings_profiles
+			ON bookings_schools.id = bookings_profiles.school_id
+	WHERE
+		(
+			bookings_profiles.id is not null
+
+			OR
+
+			-- this is an easy way to identify schools that were
+			-- part of the initial imports
+			bookings_schools.contact_email is not null
+		)
 );
