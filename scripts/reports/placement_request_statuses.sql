@@ -26,10 +26,19 @@ create or replace view placement_request_statuses as (
 			)
 				then 'withdrawn'
 
-			-- decision to be made: pr hasn't yet been accepted or cancelled
+			-- unviewed: pr hasn't yet been looked at by a staff member
 			when (
 					bb.id is null
 				and bprc.id is null
+				and bpr.viewed_at is null
+			)
+				then 'unviewed'
+
+			-- decision to be made: pr has been looked at but hasn't yet been accepted or cancelled
+			when (
+					bb.id is null
+				and bprc.id is null
+				and bpr.viewed_at is not null
 			)
 				then 'decision to be made'
 
