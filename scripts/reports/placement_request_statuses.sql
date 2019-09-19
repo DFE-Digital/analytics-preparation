@@ -6,33 +6,8 @@ create or replace view placement_request_statuses as (
 		coalesce (bprc.created_at, bb.created_at) as decision_made_at,
 
 		case
-			-- rejection: pr hasn't been accepted but has been cancelled
-			when (bb.id is null and bprc.id is not null) then 'rejected'
 
-			-- cancellation: pr has been booked but then cancelled by the school
-			when (
-					bb.id is not null
-				and bprc.id is not null
-				and bprc.cancelled_by = 'school'
-			)
-
-				then 'cancelled'
-
-			-- withdrawal: pr has been booked but then cancelled by the candidate
-			when (
-					bb.id is not null
-				and bprc.id is not null
-				and bprc.cancelled_by = 'candidate'
-			)
-				then 'withdrawn'
-
-			-- unviewed: pr hasn't yet been looked at by a staff member
-			when (
-					bb.id is null
-				and bprc.id is null
-				and bpr.viewed_at is null
-			)
-				then 'unviewed'
+			/* Placement Requests */
 
 			-- decision to be made: pr has been looked at but hasn't yet been accepted or cancelled
 			when (
@@ -42,8 +17,57 @@ create or replace view placement_request_statuses as (
 			)
 				then 'decision to be made'
 
+			-- unviewed: pr hasn't yet been looked at by a staff member
+			when (
+					bb.id is null
+				and bprc.id is null
+				and bpr.viewed_at is null
+			)
+				then 'unviewed'
+
+			-- rejection: pr hasn't been accepted but has been cancelled the school
+			when (
+					bb.id is null
+				and bprc.id is not null
+				and bprc.cancelled_by = 'school'
+			)
+				then 'rejected'
+
+			-- withdrawal: pr hasn't been accepted but has been cancelled the candidate
+			when (
+					bb.id is null
+				and bprc.id is not null
+				and bprc.cancelled_by = 'candidate'
+			)
+				then 'withdrawn'
+
+			/* Bookings */
+
+			-- school cancellation: pr has been booked but then cancelled by the school
+			when (
+					bb.id is not null
+				and bprc.id is not null
+				and bprc.cancelled_by = 'school'
+			)
+
+				then 'school cancelled'
+
+			-- candidate cancelled: pr has been booked but then cancelled by the candidate
+			when (
+					bb.id is not null
+				and bprc.id is not null
+				and bprc.cancelled_by = 'candidate'
+			)
+				then 'candidate cancelled'
+
 			-- otherwise, accepted
-			else 'accepted'
+			when (
+					bb.id is not null
+				and bprc.id is null
+			)
+				then 'accepted'
+
+			else 'error'
 
 		end status
 
