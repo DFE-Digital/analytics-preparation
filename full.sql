@@ -187,12 +187,12 @@ create or replace view placement_request_statuses as (
 			)
 				then 'candidate cancelled'
 
-			-- otherwise, accepted
+			-- booking: it's going ahead!
 			when (
 					bb.id is not null
 				and bprc.id is null
 			)
-				then 'accepted'
+				then 'booking'
 
 			else 'error'
 
