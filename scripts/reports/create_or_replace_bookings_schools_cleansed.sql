@@ -26,7 +26,11 @@ CREATE OR REPLACE VIEW bookings_schools_cleansed AS (
 		d.name AS district,
 		r.name AS region,
 		bookings_schools.views,
-		bookings_schools.availability_preference_fixed
+		bookings_schools.availability_preference_fixed,
+		case
+			when bookings_schools.created_at < '2019-04-01' then true
+			else false
+		end as sep
 	FROM
 		bookings_schools
 	LEFT OUTER JOIN
