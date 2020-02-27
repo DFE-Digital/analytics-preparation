@@ -43,7 +43,7 @@ create or replace view candidates_acceptance_record as (
 			when bb.id is not null then 'Yes'
 			else 'No'
 		end as accepted
-	
+
 	from
 		bookings_candidates bc
 
@@ -64,6 +64,30 @@ create or replace view candidates_acceptance_record as (
 	order by
 		bc.gitis_uuid
 
+);
+create or replace view candidates_never_accepted as (
+	select
+		gitis_uuid
+	from
+		candidates_acceptance_record
+	where
+		gitis_uuid not in (
+			/*
+				get a list of every candidate who has ever been accepted; every
+				remaining uuid that's not in this list must never have been
+				accepted
+			*/
+			select
+				gitis_uuid
+			from
+				candidates_acceptance_record
+			where
+				accepted = 'Yes'
+			group by
+				gitis_uuid
+		)
+	group by
+		gitis_uuid
 );
 CREATE OR REPLACE VIEW bookings_schools_cleansed AS (
 	SELECT
